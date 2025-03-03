@@ -36,13 +36,13 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.PACKAGE_NAME }}-${{ PACKAGE_VERSION }}
+          name: ${{ env.PACKAGE_NAME }}-${{ env.PACKAGE_VERSION }}
           path: "*.vsix"
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: v${{ github.event.inputs.version }}
           name: Release v${{ github.event.inputs.version }}
-          files: ${{ env.PACKAGE_NAME }}-${{ PACKAGE_VERSION }}.vsix
+          files: ${{ env.PACKAGE_NAME }}-${{ env.PACKAGE_VERSION }}.vsix
           draft: false
           prerelease: false
