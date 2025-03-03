@@ -17,8 +17,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: Clone GitLens
+        run: git clone https://github.com/gitkraken/vscode-gitlens.git
       - name: Apply patch
-        run: git apply patches/1.patch
+        run: cd vscode-gitlens && git apply ../patches/1.patch
       - name: Setup node
         uses: actions/setup-node@v4
         with:
@@ -28,21 +30,21 @@ jobs:
         with:
           version: 10
       - name: Setup Environment
-        run: node -e "console.log('PACKAGE_VERSION=' + require('./package.json').version + '\nPACKAGE_NAME=' + require('./package.json').name + '-' + require('./package.json').version)" >> $GITHUB_ENV
+        run: cd vscode-gitlens && node -e "console.log('PACKAGE_VERSION=' + require('./package.json').version + '\nPACKAGE_NAME=' + require('./package.json').name + '-' + require('./package.json').version)" >> $GITHUB_ENV
       - name: Install
-        run: pnpm install
+        run: cd vscode-gitlens && pnpm install
       - name: Package extension
-        run: pnpm run package
+        run: cd vscode-gitlens && pnpm run package
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.PACKAGE_NAME }}-${{ env.PACKAGE_VERSION }}
-          path: "*.vsix"
+          path: "./vscode-gitlens/*.vsix"
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: v${{ github.event.inputs.version }}
           name: Release v${{ github.event.inputs.version }}
-          files: ${{ env.PACKAGE_NAME }}-${{ env.PACKAGE_VERSION }}.vsix
+          files: ./vscode-gitlens/${{ env.PACKAGE_NAME }}-${{ env.PACKAGE_VERSION }}.vsix
           draft: false
           prerelease: false
