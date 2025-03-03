@@ -1,0 +1,40 @@
+diff --git a/scripts/generateLicenses.mjs b/scripts/generateLicenses.mjs
+index f0e85c735..beea0cb28 100644
+--- a/scripts/generateLicenses.mjs
++++ b/scripts/generateLicenses.mjs
+@@ -87,4 +87,4 @@ async function generate() {
+ 	void generateThirdpartyNotices(packages);
+ }
+ 
+-void generate();
++// void generate();
+diff --git a/src/plus/gk/utils/subscription.utils.ts b/src/plus/gk/utils/subscription.utils.ts
+index 807bc6057..580c4c587 100644
+--- a/src/plus/gk/utils/subscription.utils.ts
++++ b/src/plus/gk/utils/subscription.utils.ts
+@@ -49,6 +49,7 @@ export function getSubscriptionStateString(state: SubscriptionState | undefined)
+ }
+ 
+ export function computeSubscriptionState(subscription: Optional<Subscription, 'state'>): SubscriptionState {
++	return SubscriptionState.Paid;
+ 	const {
+ 		account,
+ 		plan: { actual, effective },
+@@ -63,7 +64,7 @@ export function computeSubscriptionState(subscription: Optional<Subscription, 's
+ 				return preview == null ? SubscriptionState.Community : SubscriptionState.ProPreviewExpired;
+ 
+ 			case SubscriptionPlanId.CommunityWithAccount: {
+-				if (effective.nextTrialOptInDate != null && new Date(effective.nextTrialOptInDate) < new Date()) {
++				if (effective.nextTrialOptInDate != null && new Date(effective.nextTrialOptInDate!) < new Date()) {
+ 					return SubscriptionState.ProTrialReactivationEligible;
+ 				}
+ 
+@@ -82,7 +83,7 @@ export function computeSubscriptionState(subscription: Optional<Subscription, 's
+ 			return preview == null ? SubscriptionState.Community : SubscriptionState.ProPreview;
+ 
+ 		case SubscriptionPlanId.CommunityWithAccount: {
+-			if (effective.nextTrialOptInDate != null && new Date(effective.nextTrialOptInDate) < new Date()) {
++			if (effective.nextTrialOptInDate != null && new Date(effective.nextTrialOptInDate!) < new Date()) {
+ 				return SubscriptionState.ProTrialReactivationEligible;
+ 			}
+ 
